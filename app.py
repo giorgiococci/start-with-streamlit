@@ -48,6 +48,7 @@ def main_menu():
     df = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],columns=['lat', 'lon']) 
     charts_expander.map(df)
 
+
     image_expander = st.beta_expander("Images")
     image_expander.write("E' possibile anche inserire delle immagini...")
     image = Image.open('static/reti-campus.png')
@@ -75,11 +76,25 @@ def side_menu():
     free_text = st.sidebar.text_input("Inserisci quello che vuoi")
 
     if(st.sidebar.button('Stampa le tue scelte')):
+        st.success("Hai fatto una selezione corretta!!")
         st.markdown('**Le tue scelte sono:**')
         st.write(f'Age: {age}')
         st.write(f'Random Number: {random_number}')
         st.write(f'Range Number: {range_number}')
         st.write(f'Free Text: {free_text}')
+
+
+    st.sidebar.write("Comanda il grafico")
+
+    df = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['a', 'b', 'c'])
+
+    column = st.sidebar.multiselect(
+        'Quali colonne vuoi mostrare?',
+        df.columns)
+
+    st.line_chart(df[column])
 
 if __name__ == "__main__":
     main_menu()
