@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from PIL import Image
 
 def main_menu():
     st.title("Vediamo un po' di cose in StreamLit!")
@@ -47,7 +48,10 @@ def main_menu():
     df = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],columns=['lat', 'lon']) 
     charts_expander.map(df)
 
-    charts_expander.write("E' possibile anche inserire delle immagini...")
+    image_expander = st.beta_expander("Images")
+    image_expander.write("E' possibile anche inserire delle immagini...")
+    image = Image.open('static/reti-campus.png')
+    image_expander.image(image, use_column_width=True)
 
 def side_menu():
     st.sidebar.title("Questa è la sidebar!")
