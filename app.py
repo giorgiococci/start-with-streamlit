@@ -9,43 +9,74 @@ def main_menu():
     st.write('In questa dashboard mostreremo un po'' di componenti che Streamlit ci mette a disposizione per creare fantastiche dashboard.')
     st.markdown('Possiamo *anche* aggiungere un **po''** di ***markdown*** per dare un stile alla nostra pagina.')
 
-    st.write('Stampiamo anche un dataframe di Pandas: ')
+    df_expander = st.beta_expander("Dataframe")
+    df_expander.write('Stampiamo anche un dataframe di Pandas: ')
 
     df = pd.DataFrame({'first column': [1, 2, 3, 4],'second column': [10, 20, 30, 40]})
-    st.write(df)
+    df_expander.write(df)
 
     # Si può fare anche in questo modo:
     # st.dataframe(df)
 
-    st.write("Con Streamlit possiamo anche colorare delle celle del Dataframe. Ad esempio evidenziamo il valore massimo per ogni colonna")
+    df_expander.write("Con Streamlit possiamo anche colorare delle celle del Dataframe. Ad esempio evidenziamo il valore massimo per ogni colonna")
 
     df = pd.DataFrame(np.random.randn(10, 20),columns=('col %d' % i for i in range(20)))
-    st.dataframe(df.style.highlight_max(axis=0))
+    df_expander.dataframe(df.style.highlight_max(axis=0))
 
-    st.header("Adesso passiamo ai grafici!")
-    st.write("Streamlit supporta diverse librerie per disegnare grafici, tra cui **matplotlib**, più alcuni grafici si possono costruire nativamente.")
+    charts_expander = st.beta_expander("Charts")
 
-    st.write("I primi due grafici sono fatti nativamente con Streamlit:")
+    charts_expander.header("Adesso passiamo ai grafici!")
+    charts_expander.write("Streamlit supporta diverse librerie per disegnare grafici, tra cui **matplotlib**, più alcuni grafici si possono costruire nativamente.")
+
+    charts_expander.write("I primi due grafici sono fatti nativamente con Streamlit:")
     chart_data = pd.DataFrame(np.random.randn(20, 3),columns=['a', 'b', 'c']) 
-    st.line_chart(chart_data)
+    charts_expander.line_chart(chart_data)
 
-    st.bar_chart(chart_data)
+    charts_expander.bar_chart(chart_data)
 
-    st.write("Questo è un esempio con matplotlib:")
+    charts_expander.write("Questo è un esempio con matplotlib:")
 
     arr = np.random.normal(1, 1, size=100)
     fig, ax = plt.subplots()
     ax.hist(arr, bins=20)
 
-    st.pyplot(fig)
+    charts_expander.pyplot(fig)
 
-    st.write("Esempio di una mappa con Streamlit:")
+    charts_expander.write("Esempio di una mappa con Streamlit:")
 
     df = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],columns=['lat', 'lon']) 
-    st.map(df)
+    charts_expander.map(df)
 
-    st.write("E' possibile anche inserire delle immagini...")
+    charts_expander.write("E' possibile anche inserire delle immagini...")
 
+def side_menu():
+    st.sidebar.title("Questa è la sidebar!")
+    st.sidebar.write("Qui puoi inserire dei widget dinamici per interagire con la pagina e i dati.")
+
+    if(st.sidebar.checkbox('Show line chart')):
+        chart_data = pd.DataFrame(
+        np.random.randn(20, 3),
+        columns=['a', 'b', 'c'])
+
+        st.line_chart(chart_data)
+
+    age = st.sidebar.selectbox("Seleziona la tua fascia di età", ["0-10", "11-20", "21-30", "31-40", "41-50", "> 50"])
+
+    df_number = pd.DataFrame(np.random.randn(10,1), columns=['num'])
+
+    random_number = st.sidebar.selectbox("Quale numero preferisci?", df_number['num'])
+
+    range_number = st.sidebar.slider("Scegli un altro numero in questo range", 0, 20, 5, 1)
+
+    free_text = st.sidebar.text_input("Inserisci quello che vuoi")
+
+    if(st.sidebar.button('Stampa le tue scelte')):
+        st.markdown('**Le tue scelte sono:**')
+        st.write(f'Age: {age}')
+        st.write(f'Random Number: {random_number}')
+        st.write(f'Range Number: {range_number}')
+        st.write(f'Free Text: {free_text}')
 
 if __name__ == "__main__":
     main_menu()
+    side_menu()
